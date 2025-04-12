@@ -12,7 +12,12 @@ public struct Money {
     var amount: Int
     var currency: String
     let acceptedCurrs = ["USD", "GBP", "EUR", "CAN"]
-
+      
+    init(amount: Int, currency: String) {
+        self.amount = amount
+        self.currency = currency
+    }
+    
     func convert(_ to: String) -> Money {
         var newAmount = amount
 //        var newCurrency: String
@@ -90,14 +95,36 @@ public class Job {
     var type : JobType
     var title : String
     
-    func calculateIncome() -> Int {
+    init(title: String, type: JobType) {
+        self.type = type
+        self.title = title
+    }
+    
+    func calculateIncome(_ hours : Int) -> Int {
         switch type {
         case .Hourly(let double):
-            <#code#>
+            return Int(double * Double(hours))
         case .Salary(let uInt):
-            return type.Salary
+            return Int(uInt)
         }
-        return -1
+    }
+    
+    func raise(byAmount : Double)  {
+        switch type {
+        case .Hourly(let double):
+            type = .Hourly(double + byAmount)
+        case .Salary(let uInt):
+            type = .Salary(uInt + UInt(byAmount))
+        }
+    }
+    
+    func raise(byPercent : Double) {
+        switch type {
+        case .Hourly(let double):
+            type = .Hourly(double * (1 + byPercent))
+        case .Salary(let uInt):
+            type = .Salary(uInt * (1 + UInt(byPercent)))
+        }
     }
 }
 
