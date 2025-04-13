@@ -149,10 +149,6 @@ public class Person {
         self.firstName = firstName
         self.lastName = lastName
         self.age = age
-//        if age < 21 {
-//            self.job = nil
-//            self.spouse = nil
-//        }
     }
     
     func toString() -> String {
