@@ -137,6 +137,7 @@ public class Person {
             }
         }
     }
+    
     var spouse : Person? {
         didSet {
             if age < 21 {
