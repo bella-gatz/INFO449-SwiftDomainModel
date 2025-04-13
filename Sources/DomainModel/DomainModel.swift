@@ -68,7 +68,6 @@ public struct Money {
     
     func subtract(_ other: Money) -> Money {
 
-        let curr = self.currency
         // convert to other.currency
         let newMoney = self.convert(other.currency)
         // then add
@@ -119,7 +118,7 @@ public class Job {
         case .Hourly(let double):
             type = .Hourly(double * (1 + byPercent))
         case .Salary(let uInt):
-            type = .Salary(uInt * (1 + UInt(byPercent)))
+            type = .Salary(UInt(Double(uInt) * (1 + byPercent)))
         }
     }
 }
@@ -131,18 +130,33 @@ public class Person {
     var firstName : String
     var lastName : String
     var age : Int
-    var job : Job?
-    var spouse : Person?
+    var job : Job? {
+        didSet {
+            if age < 21 {
+                job = nil
+            }
+        }
+    }
+    var spouse : Person? {
+        didSet {
+            if age < 21 {
+                spouse = nil
+            }
+        }
+    }
     
     init(firstName: String, lastName: String, age: Int) {
         self.firstName = firstName
         self.lastName = lastName
         self.age = age
+//        if age < 21 {
+//            self.job = nil
+//            self.spouse = nil
+//        }
     }
     
     func toString() -> String {
-        
-        return "Person: firstName: \(firstName) lastName: \(lastName) age: \(age) job: \(job) spouse: \(spouse)"
+        return "[Person: firstName:\(firstName) lastName:\(lastName) age:\(age) job:\(job) spouse:\(spouse)]"
     }
     
 }
@@ -154,7 +168,7 @@ public class Family {
     var members : [Person] = []
     
     init(spouse1 : Person, spouse2 : Person) {
-        if spouse1.spouse == nil && spouse2.spouse == nil{
+        if spouse1.spouse == nil && spouse2.spouse == nil {
             self.members.append(spouse1)
             self.members.append(spouse2)
             spouse1.spouse = spouse2
