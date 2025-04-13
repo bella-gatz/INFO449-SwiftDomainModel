@@ -57,29 +57,25 @@ public struct Money {
     }
     
     func add(_ other: Money) -> Money {
-        // convert to self.currency ❎
-        let curr = self.currency
         // convert to other.currency
         let newMoney = self.convert(other.currency)
-        // then add
-        let newAmount = other.amount + newMoney.amount
+        // then add (both in other currency)
+        let newAmount = newMoney.amount + other.amount
         let addedMoney = Money(amount: newAmount, currency: other.currency)
-        // convert back to initial currency
         
-        return addedMoney.convert(curr)
+        return addedMoney
     }
     
     func subtract(_ other: Money) -> Money {
-        // convert to self.currency ❎
+
         let curr = self.currency
         // convert to other.currency
         let newMoney = self.convert(other.currency)
         // then add
         let newAmount = newMoney.amount - other.amount
         let addedMoney = Money(amount: newAmount, currency: other.currency)
-        // convert back to initial currency
         
-        return addedMoney.convert(curr)
+        return addedMoney
     }
 }
 
@@ -155,4 +151,34 @@ public class Person {
 // Family
 //
 public class Family {
+    var members : [Person] = []
+    
+    init(spouse1 : Person, spouse2 : Person) {
+        if spouse1.spouse == nil && spouse2.spouse == nil{
+            self.members.append(spouse1)
+            self.members.append(spouse2)
+            spouse1.spouse = spouse2
+            spouse2.spouse = spouse1
+        }
+    }
+    
+    func haveChild(_ child : Person) -> Bool {
+        if self.members.count <= 2 {
+            if members[0].age > 21 || members[1].age > 21 {
+                self.members.append(child)
+                return true
+            }
+        }
+        return false
+    }
+    
+    func householdIncome() -> Int {
+        var totalIncome = 0
+        for member in self.members {
+            if let job = member.job {
+                totalIncome += job.calculateIncome(2000)
+            }
+        }
+        return totalIncome
+    }
 }
